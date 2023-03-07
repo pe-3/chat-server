@@ -25,7 +25,7 @@ router.post('/signup', async function (req, res, next) {
     // 查看邮箱验证码是否正确
     const real_code = req.signal.get(mail);
     if (real_code !== code) {
-      return res.status(400).json({ message: '邮箱验证码错误' });
+      return res.status(200).json({ message: '邮箱验证码错误' });
     }
     req.signal.delete(mail);
 
@@ -33,7 +33,7 @@ router.post('/signup', async function (req, res, next) {
     const user = await getUserByUsername(username);
     console.log(user);
     if (user instanceof Array && user.length) {
-      return res.status(400).json({ message: '该用户名已被注册' });
+      return res.status(200).json({ message: '该用户名已被注册' });
     }
 
     // 加密密码
@@ -52,7 +52,7 @@ router.post('/signup', async function (req, res, next) {
       return res.status(201).json({ message: '注册成功' });
     }
 
-    return res.status(401).json({ message: '服务器出现问题，请稍后再试' });
+    return res.status(200).json({ message: '服务器出现问题，请稍后再试' });
   } catch (error) {
     next(error);
   }
@@ -64,6 +64,7 @@ router.post('/signup', async function (req, res, next) {
 
 const { getToken } = require('../midware/auth');
 router.post('/signin', async function (req, res, next) {
+  
   try {
     const { username, password } = req.body;
 
@@ -73,7 +74,7 @@ router.post('/signin', async function (req, res, next) {
     // 检查信息合法
     const isInfoCorrect = user && bcrypt.compareSync(password, user.password);
     if (!isInfoCorrect) {
-      return res.status(401).json({ message: '用户名或者密码不正确' });
+      return res.status(200).json({ message: '用户名或者密码不正确' });
     }
 
     delete user.password;
@@ -111,6 +112,11 @@ router.put('/', authenticateToken, async function (req, res, next) {
       }
       return pre;
     }, {});
+
+    console.log(update_props);
+    if(JSON.stringify(update_props)  === '{}') {
+      return res.send({message: '没有要更新的信息'});
+    }
 
     // 更新数据
     const result = await updateUser(id, update_props);

@@ -14,7 +14,11 @@ const USER_PROPS_WRITEABLE = [
     'intro',
     'user_set',
     'phone',
-    'site'
+    'site',
+    'age',
+    'birthday',
+    'gender',
+    'personal_back'
 ];
 exports.USER_PROPS_WRITEABLE = USER_PROPS_WRITEABLE;
 
@@ -28,8 +32,7 @@ exports.USER_PROPS_WRITEABLE = USER_PROPS_WRITEABLE;
 
 const USER_PROPS_SENSITIVE = [
     'id',
-    'password',
-    'mail'
+    'password'
 ]
 
 exports.USER_PROPS_SENSITIVE = USER_PROPS_SENSITIVE;

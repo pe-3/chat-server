@@ -10,9 +10,12 @@ const userRouter = require('./routes/user');
 const mailRouter = require('./routes/mail');
 const {authRouter} = require('./midware/auth');
 const friendRouter = require('./routes/friend');
+const uploadRouter = require('./routes/upload');
 
 // 中间件
 const signal = require('./midware/signal');
+const cors = require('cors');
+const delay = require('./midware/delay');
 
 const app = express();
 
@@ -26,6 +29,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
+// 设置跨域
+app.use(cors());
+// 设置响应时间延迟
+app.use(delay(1000));
 
 app.use('/', indexRouter);
 app.use(signal);
@@ -35,6 +42,7 @@ app.use(authRouter);
 
 // 注册需要鉴权的路由模块
 authRouter.use('/friend', friendRouter);
+authRouter.use('/upload', uploadRouter);
 
 
 // catch 404 and forward to error handler
