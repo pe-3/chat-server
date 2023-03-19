@@ -15,11 +15,13 @@ const {
     getBlackList,
     delFriend
 } = require('../mysql/friend');
+
 const {
     getUsersByIds,
     userInfoFilter,
     getIdByUsername
 } = require('../mysql/user');
+
 /**
  * 朋友列表
  */
@@ -187,7 +189,9 @@ router.get('/agree', async function (req, res, next) {
         // 验证是否已经申请过
         const relation1 = await queryFriend(id, friend_id);
         if (relation1.length) {
-            return res.send({ message: '已经同意过好友' });
+            if(relation1[0].status === 1) {
+                return res.send({ message: '已经同意过好友' });
+            }
         }
 
         // 发起同意好友
@@ -234,7 +238,7 @@ router.get('/black', async function (req, res, next) {
  * 拉黑好友列表
  */
 router.get('/blackList', async function (req, res, next) {
-        try {
+    try {
             const { id } = req.user;
         let idList = await getBlackList(id);
         if (!idList.length) {
@@ -278,33 +282,33 @@ router.get('/cancelBlack', async function (req, res, next) {
  * 删除好友
  */
 router.get('/del', async function (req, res, next) {
-try {
-    const { id } = req.user;
-    const { friend } = req.query;
+    try {
+        const { id } = req.user;
+        const { friend } = req.query;
 
-    const [{ id: friend_id }] = await getIdByUsername(friend);
-    // 查询是否为好友
-    const relation = await queryFriend(id, friend_id);
-    const relation1 = await queryFriend(friend_id, id);
-    if (!relation.length || !relation1.length) {
-        return res.send({ message: '还不是好友，无法删除' });
-    }
+        const [{ id: friend_id }] = await getIdByUsername(friend);
+        // 查询是否为好友
+        const relation = await queryFriend(id, friend_id);
+        const relation1 = await queryFriend(friend_id, id);
+        if (!relation.length || !relation1.length) {
+            return res.send({ message: '还不是好友，无法删除' });
+        }
 
-    // 查询是否被拉黑
-    if(relation[0].status === 3) {
-        return res.send({message: '拉黑了无法删除'});
-    }
+        // 查询是否被拉黑
+        if(relation[0].status === 3) {
+            return res.send({message: '拉黑了无法删除'});
+        }
 
-    // 删除
-    const result = await delFriend(id, friend_id);
-    const result1 = await delFriend(friend_id, id);
-    if (result.affectedRows !== 1 || result1.affectedRows !== 1) {
-        return res.send({ message: '出了点小差错，稍后再试' });
+        // 删除
+        const result = await delFriend(id, friend_id);
+        const result1 = await delFriend(friend_id, id);
+        if (result.affectedRows !== 1 || result1.affectedRows !== 1) {
+            return res.send({ message: '出了点小差错，稍后再试' });
+        }
+        res.send({ message: '删除成功' });
+    } catch (error) {
+        next(error)
     }
-    res.send({ message: '删除成功' });
-} catch (error) {
-    next(error)
-}
 });
 
 module.exports = router;

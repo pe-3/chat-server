@@ -3,7 +3,7 @@ const JWT_SECRET = '^&$^&*$*(#)';
 const expiresIn = '7d';
 const express = require('express');
 
-const getToken = function (data) {
+const createToken = function (data) {
     return jwt.sign(data, JWT_SECRET, { expiresIn });
 }
 
@@ -31,10 +31,7 @@ const authenticateToken = (req, res, next) => {
     });
 }
 
-const authRouter = express.Router();
-authRouter.use(authenticateToken);
 module.exports = {
-    getToken,
-    authenticateToken,
-    authRouter
+    createToken,
+    authenticateToken
 }

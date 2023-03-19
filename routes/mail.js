@@ -6,15 +6,15 @@ const ejs = require('ejs');
 const path = require('path');
 
 // 发送验证码用的模版
-const template = ejs.compile(
-    fs.readFileSync(
-        path.resolve(
-            __dirname,
-            '../template/mail.ejs'
-        ),
-        'utf-8'
-    )
-);
+// const template = ejs.compile(
+//     fs.readFileSync(
+//         path.resolve(
+//             __dirname,
+//             '../template/mail.ejs'
+//         ),
+//         'utf-8'
+//     )
+// );
 
 const router = express.Router();
 

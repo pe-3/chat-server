@@ -64,7 +64,7 @@ router.post('/signup', async function (req, res, next) {
 
 const { getToken } = require('../midware/auth');
 router.post('/signin', async function (req, res, next) {
-  
+
   try {
     const { username, password } = req.body;
 
@@ -114,8 +114,8 @@ router.put('/', authenticateToken, async function (req, res, next) {
     }, {});
 
     console.log(update_props);
-    if(JSON.stringify(update_props)  === '{}') {
-      return res.send({message: '没有要更新的信息'});
+    if (JSON.stringify(update_props) === '{}') {
+      return res.send({ message: '没有要更新的信息' });
     }
 
     // 更新数据
@@ -160,13 +160,14 @@ router.get('/', authenticateToken, async function (req, res, next) {
 
 router.get('/info', authenticateToken, async function (req, res, next) {
   try {
-    const {id} = req.user;
+    const { id } = req.user;
     let [info] = await getUserById(id);
     [info] = userInfoFilter(info);
-    res.send({message: '查询成功', info});
+    res.send({ message: '查询成功', info });
   } catch (error) {
     next(error);
   }
-})
+});
+
 
 module.exports = router;

@@ -5,7 +5,6 @@ const path = require('path');
 const srgbToPNG = require('../utils/srgb');
 const { getHashByUnit8Array, getHashByBuffer } = require('../utils/hash');
 const fs = require('fs');
-const e = require('express');
 
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -21,11 +20,8 @@ router.post('/avatar', upload.single('file'), async function (req, res, next) {
             return res.status(400).send('没有选中图片.');
         }
         const srgbData = Uint8Array.from(file.buffer);
-        console.log(srgbData);
 
         const fileName = await getHashByUnit8Array(srgbData) + '.png';
-
-        console.log(fileName);
 
         srgbToPNG({
             srgb: srgbData,
@@ -57,8 +53,6 @@ const perUpload = multer({
 router.post('/perback', perUpload.single('file'), (req, res, next) => {
     try {
         const file = req.file;
-
-        console.log(file);
 
         const fileName = getHashByBuffer(file.buffer) + '.' +file.mimetype.split('/')[1];
 

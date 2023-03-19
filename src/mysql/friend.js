@@ -21,8 +21,8 @@ function getFriendList(user_id, callback) {
  */
 function addFriend(user_id, friend_id, callback) {
     pool.query(
-        'insert into friends set ?', 
-        {user_id, friend_id},
+        'insert into friends set ?',
+        { user_id, friend_id },
         callback
     );
 }
@@ -35,8 +35,8 @@ function addFriend(user_id, friend_id, callback) {
 
 function getAddList(user_id, callback) {
     pool.query(
-        'select friend_id from friends where user_id = ? and status = 0', 
-        user_id, 
+        'select friend_id from friends where user_id = ? and status = 0',
+        user_id,
         callback
     );
 }
@@ -56,7 +56,7 @@ function agreeFriend(user_id, friend_id, callback) {
         'update friends set status = 1 where user_id = ? and friend_id = ?',
         [friend_id, user_id],
         (err, data) => {
-            if(err) {
+            if (err) {
                 return callback(err);
             }
             pool.query(
@@ -67,7 +67,7 @@ function agreeFriend(user_id, friend_id, callback) {
                     status: 1
                 },
                 (err_, data_) => {
-                    if(err_) {
+                    if (err_) {
                         return callback(err_);
                     }
                     callback(null, [data, data_]);
@@ -86,7 +86,7 @@ function agreeFriend(user_id, friend_id, callback) {
 
 function getAgreeList(user_id, callback) {
     pool.query(
-        'select user_id from friends where friend_id = ? and status = 0', 
+        'select user_id from friends where friend_id = ? and status = 0',
         user_id,
         callback
     );
@@ -101,7 +101,7 @@ function getAgreeList(user_id, callback) {
 
 function blackFriend(user_id, friend_id, callback) {
     pool.query(
-        'update friends set status = 3 where user_id = ? and friend_id = ?', 
+        'update friends set status = 3 where user_id = ? and friend_id = ?',
         [user_id, friend_id],
         callback
     );
@@ -116,7 +116,7 @@ function blackFriend(user_id, friend_id, callback) {
 function getBlackList(user_id, callback) {
     pool.query(
         'select friend_id from friends where user_id = ? and status = 3',
-        user_id, 
+        user_id,
         callback
     );
 }
@@ -130,7 +130,7 @@ function getBlackList(user_id, callback) {
 
 function cancelBlack(user_id, friend_id, callback) {
     pool.query(
-        'update friends set status = 1 where user_id = ? and friend_id = ?', 
+        'update friends set status = 1 where user_id = ? and friend_id = ?',
         [user_id, friend_id],
         callback
     );
@@ -144,7 +144,7 @@ function cancelBlack(user_id, friend_id, callback) {
  */
 function delFriend(user_id, friend_id, callback) {
     pool.query(
-        'update friends set status = 2 where user_id = ? and friend_id = ?', 
+        'update friends set status = 2 where user_id = ? and friend_id = ?',
         [user_id, friend_id],
         callback
     );
@@ -173,9 +173,27 @@ function queryFriend(user_id, friend_id, callback) {
 
 function recoveryFriend(user_id, friend_id, callback) {
     pool.query(
-        'update friends set status = 0 where user_id = ? and friend_id = ?', 
+        'update friends set status = 0 where user_id = ? and friend_id = ?',
         [user_id, friend_id],
-        callback
+        (err, data) => {
+            if (err || data.affecttedRows !== 1) {
+                callback({ err, data });
+            }
+            else {
+                pool.query(
+                    'update friends set status = 0 where user_id = ? and friend_id = ?',
+                    [friend_id, user_id],
+                    (err_, data_) => {
+                        if (err_ || data_.affecttedRows !== 1) {
+                            callback({ err, err_, data_ });
+                        }
+                        else {
+                            callback(null, data_);
+                        }
+                    }
+                )
+            }
+        }
     );
 }
 
