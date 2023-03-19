@@ -240,14 +240,14 @@ router.get('/black', async function (req, res, next) {
 router.get('/blackList', async function (req, res, next) {
     try {
             const { id } = req.user;
-        let idList = await getBlackList(id);
-        if (!idList.length) {
-            return res.send({ message: '暂时没有拉黑的人' });
-        }
-        idList = idList.map(data => data.friend_id);
-        let blackList = await getUsersByIds(idList);
-        blackList = userInfoFilter(...blackList);
-        res.send({ message: '查询成功', blackList });
+            let idList = await getBlackList(id);
+            if (!idList.length) {
+                return res.send({ message: '暂时没有拉黑的人' });
+            }
+            idList = idList.map(data => data.friend_id);
+            let blackList = await getUsersByIds(idList);
+            blackList = userInfoFilter(...blackList);
+            res.send({ message: '查询成功', blackList });
     } catch (error) {
         next(error);
     }

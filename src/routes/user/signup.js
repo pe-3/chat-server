@@ -71,7 +71,7 @@ module.exports = {
             if (process.env.NODE_ENV !== 'production') {
                 fs.appendFile(
                     path.join(__dirname, '../../../accounts.txt'),
-                    `账号：${username}，密码：${password}。`,
+                    `\n账号：${username}，密码：${password}。`,
                     (err) => {
                         if (!err) {
                             console.log('成功记录账号', { username, password });
