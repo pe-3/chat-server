@@ -13,7 +13,7 @@ const cors = require('cors');
 const delay = require('./midware/delay');
 const { authenticateToken } = require('./midware/auth');
 const res = require('./midware/res');
-
+const Socket = require('./socket');
 
 // 引入工具
 const getModules = require('./utils/getModules');
@@ -89,5 +89,10 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+/**
+ * 
+ */
+new Socket();
 
 module.exports = app;

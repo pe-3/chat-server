@@ -31,7 +31,6 @@ exports.USER_PROPS_WRITEABLE = USER_PROPS_WRITEABLE;
  */
 
 const USER_PROPS_SENSITIVE = [
-    'id',
     'password'
 ]
 

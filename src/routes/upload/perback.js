@@ -17,8 +17,8 @@ module.exports = {
     auth: true,
     midwares: [upload.single('file')],
     async post(req, res) {
-        const file = req.file;
         console.log(0);
+        const file = req.file;
 
         /**
          * 生成文件名和文件路径

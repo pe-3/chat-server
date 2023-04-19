@@ -2,6 +2,13 @@
  * 取消拉黑
  */
 
+const {
+    queryFriend,
+    cancelBlack
+} = require('../../mysql/friend');
+
+const { getIdByUsername } = require('../../mysql/user');
+
 module.exports = {
     auth: true,
     async get(req, res) {

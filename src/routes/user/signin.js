@@ -24,7 +24,7 @@ module.exports = {
         /**
          * 挑选载体
          */
-        const payload = { id: user.id };
+        const payload = { id: user.id, username };
 
         /**
          * 生成 token
