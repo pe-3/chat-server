@@ -6,3 +6,6 @@
 账号：accout1，密码：123456。
 账号：account1，密码：123456。
 账号：account2，密码：unravel1213。
+账号：pete，密码：pete。
+账号：admin，密码：admin。
+账号：park，密码：aprk。

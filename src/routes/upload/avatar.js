@@ -17,39 +17,44 @@ module.exports = {
     auth: true,
     midwares: [upload.single('file')],
     async post(req, res) {
-        const file = req.file;
-        if (!file) {
-            res.fail('没有选中图片');
+        try {
+            const file = req.file;
+            if (!file) {
+                res.fail('没有选中图片');
+            }
+            /**
+             * 获取照片的 srgb 数据
+             */
+            const srgbData = Uint8Array.from(file.buffer);
+
+            /**
+             * 根具数据哈希摘要获取头像文件名
+             */
+            const fileName = await getHashByUnit8Array(srgbData) + '.png';
+            const filePath = path.join(__dirname, '../../../public/avatar/', fileName);
+
+            /**
+             * 根据数据和文件名生成图片文件，并放置于 /public/avatar 中
+             */
+            srgbToPNG({
+                srgb: srgbData,
+                width: 100,
+                height: 100,
+                filePath
+            });
+
+            /**
+             * 返回给前端对应的数据
+             */
+            res.success('头像上传成功', {
+                filename: file.filename,
+                size: file.size,
+                mimetype: file.mimetype,
+                path: 'http://localhost:3000/static/avatar/' + fileName
+            });
         }
-        /**
-         * 获取照片的 srgb 数据
-         */
-        const srgbData = Uint8Array.from(file.buffer);
-        
-        /**
-         * 根具数据哈希摘要获取头像文件名
-         */
-        const fileName = await getHashByUnit8Array(srgbData) + '.png';
-        const filePath = path.join(__dirname, '../../../public/avatar/', fileName);
-
-        /**
-         * 根据数据和文件名生成图片文件，并放置于 /public/avatar 中
-         */
-        srgbToPNG({
-            srgb: srgbData,
-            width: 100,
-            height: 100,
-            filePath
-        });
-
-        /**
-         * 返回给前端对应的数据
-         */
-        res.success('头像上传成功', {
-            filename: file.filename,
-            size: file.size,
-            mimetype: file.mimetype,
-            path: 'http://localhost:3000/static/avatar/' + fileName
-        });
+        catch (e) {
+            console.log(e);
+        }
     }
 }
