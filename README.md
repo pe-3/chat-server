@@ -1,5 +1,8 @@
 # chat-server
 
+## 启动
+npm start
+
 TODO: 
 - socket 通信系统梳理
  - 整理代码
