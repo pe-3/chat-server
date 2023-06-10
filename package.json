@@ -30,8 +30,8 @@
     "socket.io": "^4.6.1"
   },
   "binary": {
-    "module_name":"binding.node",
-    "module_path":"./build/Release/",
+    "module_name":"<your-binary-file-name>.node",
+    "module_path":"./release/",
     "host":"<your-download-url>"
   }
 }
