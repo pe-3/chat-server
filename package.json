@@ -31,6 +31,6 @@
   "binary": {
     "module_name":"binding.node",
     "module_path":"./build/Release/",
-    "host":""
+    "host":"<your-download-url>"
   }
 }
