@@ -5,7 +5,6 @@
   "scripts": {
     "start": "nodemon ./bin/www "
   },
-  "main": "./bin/www",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "canvas": "^2.11.0",
@@ -28,10 +27,5 @@
     "sharp": "^0.31.3",
     "uuid": "^9.0.0",
     "socket.io": "^4.6.1"
-  },
-  "binary": {
-    "module_name":"<your-binary-file-name>.node",
-    "module_path":"./release/",
-    "host":"<your-download-url>"
   }
 }
